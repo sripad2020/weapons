@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weapon Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, #0a0a0a, #1a1a2e);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 1rem;
+            border-bottom: 2px solid #4a4a4a;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .intro-section {
+            background: rgba(30, 30, 46, 0.7);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-left: 4px solid #00ffaa;
+        }
+
+        .intro-section p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .detection-card {
+            background: rgba(30, 30, 46, 0.7);
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            border-left: 4px solid #00ffaa;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .detection-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 255, 170, 0.2);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffaa;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .card-description {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background-color: #00ffaa;
+            box-shadow: 0 0 10px #00ffaa;
+        }
+
+        .tech-section {
+            background: rgba(30, 30, 46, 0.7);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tech-section h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffaa;
+            margin-bottom: 1rem;
+        }
+
+        .tech-section ul {
+            padding-left: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .tech-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            border-top: 1px solid #4a4a4a;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        .login-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 10px;
+    font-size: 1rem;
+    font-family: 'Orbitron', sans-serif;
+    color: #0a0a0a;
+    background-color: #00ffaa;
+    border: 2px solid #00ffaa;
+    border-radius: 5px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+}
+
+.login-button:hover {
+    background-color: #0a0a0a;
+    color: #00ffaa;
+    box-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+}
+
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <header>
+    <h1>WEAPON DETECTION SYSTEM</h1>
+    <p class="subtitle">Advanced Recognition Weapons for Military</p>
+    <a href="/login" class="login-button">Login</a>
+</header>
+
+
+        <div class="intro-section">
+            <p>Our Weapon Detection System represents the cutting edge in military surveillance technology, combining artificial intelligence, advanced sensor arrays, and real-time data processing to identify and classify a wide range of military assets and potential threats.</p>
+
+            <p>The system utilizes multiple detection modalities including thermal imaging, radar signature analysis, visual pattern recognition, and electromagnetic spectrum monitoring to provide comprehensive situational awareness in any operational environment.</p>
+
+            <p>Below you'll find detailed information about the specific military assets our system is designed to detect and analyze.</p>
+        </div>
+
+        <div class="tech-section">
+            <h2>Detection Technologies</h2>
+            <ul>
+                <li><strong>Thermal Imaging:</strong> Identifies heat signatures of personnel and vehicles through camouflage and in low-visibility conditions</li>
+                <li><strong>Radar Analysis:</strong> Detects metallic objects and vehicle movements at long ranges</li>
+                <li><strong>Visual Recognition:</strong> AI-powered image analysis for identifying specific weapon models and military equipment</li>
+                <li><strong>Acoustic Sensors:</strong> Detects and classifies weapons fire and vehicle engine sounds</li>
+                <li><strong>RF Monitoring:</strong> Identifies military communications and electronic warfare systems</li>
+            </ul>
+        </div>
+
+        <div class="dashboard">
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>CAMOUFLAGE SOLDIER</h3>
+                <p class="card-description">Our multi-spectral imaging can detect soldiers even with advanced camouflage patterns by analyzing micro-movements, thermal signatures, and material properties. The system maintains a 95% detection rate against modern camouflage techniques.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>WEAPON</h3>
+                <p class="card-description">The system catalogues over 1,200 weapon types from pistols to rocket launchers. Millimeter-wave scanners can detect concealed weapons through clothing at distances up to 50 meters, while AI analysis identifies specific makes and models.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>MILITARY TANK</h3>
+                <p class="card-description">Tank identification includes classification by nation of origin, model, and armament configuration. The system analyzes tread patterns, turret shapes, and thermal signatures to provide threat assessment and targeting data.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>MILITARY TRUCK</h3>
+                <p class="card-description">Distinguishes between troop transports, supply vehicles, and mobile command centers. Can identify specific truck models and estimate troop capacity based on vehicle dimensions and heat signatures.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>MILITARY VEHICLE</h3>
+                <p class="card-description">Detection covers the full spectrum of military vehicles including APCs, reconnaissance vehicles, and mobile artillery. The system tracks movement patterns to distinguish between active combat units and support elements.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>CIVILIAN</h3>
+                <p class="card-description">Advanced behavioral analysis helps distinguish between combatants and non-combatants, reducing collateral damage. The system monitors movement patterns, group dynamics, and stress indicators to identify potential threats among civilian populations.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>SOLDIER</h3>
+                <p class="card-description">Uniform analysis can identify military affiliation, rank, and potential specialization. The system maintains a database of over 300 military uniforms from nations worldwide, updated quarterly.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>CIVILIAN VEHICLE</h3>
+                <p class="card-description">The system maintains a database of civilian vehicle models to distinguish them from potential threats. Can identify vehicle modifications that might indicate covert military use or improvised weapon platforms.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>MILITARY ARTILLERY</h3>
+                <p class="card-description">Detects artillery pieces, rocket launchers, and mobile missile systems. The system calculates potential firing arcs and ranges to provide early warning of artillery threats to friendly forces.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>TRENCH</h3>
+                <p class="card-description">Using terrain analysis and disturbance detection, the system can identify defensive earthworks and tunnel systems. Thermal imaging reveals occupant locations and potential weapon emplacements.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>MILITARY AIRCRAFT</h3>
+                <p class="card-description">Integrated radar and visual recognition identifies aircraft by type, nation of origin, and armament configuration. The system tracks flight patterns to distinguish between combat maneuvers and transport missions.</p>
+            </div>
+
+            <div class="detection-card">
+                <h3 class="card-title"><span class="status-indicator"></span>MILITARY WARSHIP</h3>
+                <p class="card-description">Satellite and coastal radar integration provides comprehensive maritime surveillance. The system identifies warships by class, tracks movement patterns, and monitors for missile launch preparations.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Weapon Detection System | Defense Technology Research Division | © 2023 Advanced Security Systems</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00ffaa"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00ffaa",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.5
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+    </script>
+</body>
+</html>

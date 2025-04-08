@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weapon Detection System - Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(to bottom, #0a0a0a, #1a1a2e);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            border-bottom: 2px solid #4a4a4a;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #00ffaa;
+            text-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+
+        .analysis-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .analysis-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .upload-box, .results-box {
+            background: rgba(30, 30, 46, 0.7);
+            border-radius: 8px;
+            padding: 2rem;
+            border-left: 4px solid #00ffaa;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffaa;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            border: 2px dashed #444;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: #00ffaa;
+            background: rgba(0, 255, 170, 0.05);
+        }
+
+        .file-upload i {
+            font-size: 3rem;
+            color: #00ffaa;
+            margin-bottom: 1rem;
+        }
+
+        .file-upload p {
+            color: #aaa;
+            text-align: center;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .preview-container {
+            width: 100%;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: #00ffaa;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: #00e699;
+            box-shadow: 0 0 15px rgba(0, 255, 170, 0.5);
+        }
+
+        .submit-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .processed-image {
+            width: 100%;
+            height: 300px;
+            background: rgba(20, 20, 36, 0.8);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        #result-image {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .results-container {
+            margin-top: 1.5rem;
+        }
+
+        .result-item {
+            background: rgba(20, 20, 36, 0.8);
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result-label {
+            color: #00ffaa;
+        }
+
+        .result-value {
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background-color: #00ffaa;
+            box-shadow: 0 0 10px #00ffaa;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 1rem;
+            border-top: 1px solid #4a4a4a;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Loading animation */
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 255, 170, 0.2);
+            border-top: 4px solid #00ffaa;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+
+    <div class="container">
+        <header>
+            <h1>WEAPON DETECTION ANALYSIS</h1>
+            <p class="subtitle">Upload image for threat assessment and classification</p>
+        </header>
+
+        <form action="/detections" method="post">
+        <div class="analysis-section">
+            <div class="upload-box">
+                <h2 class="section-title"><span class="status-indicator"></span>IMAGE UPLOAD</h2>
+
+                <div class="file-upload" id="upload-area">
+                    <i>📁</i>
+                    <p>Click to browse or drag & drop image file</p>
+                    <p><small>Supported formats: JPG, PNG (Max 5MB)</small></p>
+                    <input type="file" id="file-input" accept="image/*">
+                </div>
+
+                <div class="preview-container" id="preview-container">
+                    <img src="{{path_image}}" id="image-preview" alt="Preview of uploaded image">
+                </div>
+
+                <button type="button" class="submit-btn" id="analyze-btn" disabled>ANALYZE IMAGE</button>
+
+                <div class="loading" id="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <p>Processing image...</p>
+                </div>
+            </div>
+
+        </form>
+
+            <div class="results-box">
+                <h2 class="section-title"><span class="status-indicator"></span>DETECTION RESULTS</h2>
+
+                <div class="processed-image">
+                    <img src="{{image_path}}" id="result-image" alt="Processed image with detections" style="display: none;">
+                </div>
+
+                    <div class="result-item">
+                        <span class="result-label">Confidence:</span>
+                        <span class="result-value" id="confidence">-</span>
+                    </div>
+
+
+                    <div class="result-item">
+                        <span class="result-label">Objects Detected:</span>
+                        <span class="result-value" id="objects-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Weapon Detection System | Classified Technology | © 2023 Defense Systems Inc.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize particles.js
+        document.addEventListener('DOMContentLoaded', function() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 60,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#00ffaa"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#00ffaa",
+                        "opacity": 0.1,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1.5,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 0.2
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+
+            // File upload functionality
+            const fileInput = document.getElementById('file-input');
+            const uploadArea = document.getElementById('upload-area');
+            const previewContainer = document.getElementById('preview-container');
+            const imagePreview = document.getElementById('image-preview');
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const resultImage = document.getElementById('result-image');
+            const placeholderText = document.getElementById('placeholder-text');
+            const resultsContainer = document.getElementById('results-container');
+
+            // Click on upload area triggers file input
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // Handle file selection
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    if (file.size > 5 * 1024 * 1024) {
+                        alert('File size exceeds 5MB limit');
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        imagePreview.src = event.target.result;
+                        previewContainer.style.display = 'block';
+                        analyzeBtn.disabled = false;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Drag and drop functionality
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#00ffaa';
+                uploadArea.style.background = 'rgba(0, 255, 170, 0.1)';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#444';
+                uploadArea.style.background = 'transparent';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#444';
+                uploadArea.style.background = 'transparent';
+
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.match('image.*')) {
+                    fileInput.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    fileInput.dispatchEvent(event);
+                }
+            });
+
+            // Simulate analysis (in a real app, this would be an API call)
+            analyzeBtn.addEventListener('click', () => {
+                loadingIndicator.style.display = 'block';
+                analyzeBtn.disabled = true;
+
+                // Simulate processing delay
+                setTimeout(() => {
+                    loadingIndicator.style.display = 'none';
+
+                    // Display results (mock data)
+                    resultImage.src = imagePreview.src; // In real app, this would be the processed image
+                    resultImage.style.display = 'block';
+                    placeholderText.style.display = 'none';
+
+                    // Show results container with mock data
+                    resultsContainer.style.display = 'block';
+                    document.getElementById('primary-threat').textContent = 'Military Vehicle';
+                    document.getElementById('confidence').textContent = '92%';
+                    document.getElementById('threat-level').textContent = 'High';
+                    document.getElementById('objects-count').textContent = '3';
+
+                    analyzeBtn.disabled = false;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
